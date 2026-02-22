@@ -78,13 +78,7 @@ Created calculated columns and measures using DAX
 
 Applied filtering logic for accurate KPI computation
 
-📂 Repository Structure
-
-Business_Insights_360.pbix → Main Power BI project file
-
-screenshots/ → Dashboard preview images
-
-README.md → Project documentation
+----------------------------------------------------------------------------------------------------------------------------------------------------------*
 
 💼 Business Impact
 
@@ -100,13 +94,7 @@ Improve profitability tracking
 
 Reduce manual reporting efforts
 
-🚀 How to Use
-
-Download the .pbix file
-
-Open in Microsoft Power BI Desktop
-
-Explore interactive visuals and slicers
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*
 
 📌 Project Highlights
 
