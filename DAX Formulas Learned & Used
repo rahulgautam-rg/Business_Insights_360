@@ -1,0 +1,68 @@
+1. ABS Error =
+2. SUMX(DISTINCT(dim_date[date]),
+3. SUMX(DISTINCT(dim_product[product_code]), ABS([Net Error])))
+4. ABS Error % = DIVIDE([ABS Error], [Forecast Qty], 0)
+5. ABS Error LY = CALCULATE([ABS Error],SAMEPERIODLASTYEAR(dim_date[date]))
+6. Ads & Promotions $ = SUM(‘fact_actuals_estimates'[ads_promotions])
+7. Atliq MS % = CALCULATE([Market Share %], marketshare[manufacturer]=”atliq”)
+7. BM Message = IF([NS BM $] = BLANK() || [GM % BM] = BLANK() || [NP % BM] = BLANK(), “BM Target is not available for the selected filters”, “”)
+8. Customer / Product Filter Check = ISCROSSFILTERED(dim_product[product]) || ISFILTERED(dim_customer[customer])
+9. Forecast Accuracy % = IF([ABS Error %]<>BLANK(), 1 – [ABS Error %], BLANK())
+10. Forecast Accuracy % LY = CALCULATE([Forecast Accuracy %], SAMEPERIODLASTYEAR(dim_date[date]))
+11. Forecast Qty = 
+var lsalesdate = MAX(LastSalesMonth[LastSalesMonth])
+return
+CALCULATE(SUM(fact_forecast_monthly[forecast_quantity]), fact_forecast_monthly[date]<=lsalesdate
+12. Freight Cost $ = SUM(fact_actuals_estimates[Freight_cost])
+13. GS $ = SUM(fact_actuals_estimates[gross_sales_amount])
+14. Last Sales Month Home =
+“Sales Data Loaded Until : ” & FORMAT(MAX(LastSalesMonth[LastSalesMonth]), “MMM YY”)
+15. Manufacturing Cost $ = SUM(fact_actuals_estimates[manufacturing_cost])
+16. Market Share % = DIVIDE(SUM(marketshare[sales_$]),SUM(marketshare[total_market_sales_$]), 0)
+17. Net Error = [Forecast Qty]-[Sales Qty]
+18. Net Error % = DIVIDE([Net Error],[Forecast Qty],0)
+19. Net Error LY = CALCULATE([Net Error],SAMEPERIODLASTYEAR(dim_date[date]))
+20. Net Profit % = DIVIDE([Net Profit $],[NS $],0)
+21. Net Profit % LY = CALCULATE([Net Profit %], SAMEPERIODLASTYEAR(dim_date[date]))
+22. Net Profit $ = [GM $]+[Operational Expense $]
+23. NIS $ = SUM(fact_actuals_estimates[net_invoice_sales_amount])
+24. NP % BM =
+SWITCH(TRUE(),
+SELECTEDVALUE(‘Set BM'[ID])=1, [Net Profit % LY],
+SELECTEDVALUE(‘Set BM'[ID])=2, [NP Target %])
+25. NP Target % = DIVIDE([NP Target $], SUM(NsGmTarget[np_target]), 0)
+26. NP Target $ = SUM(NsGmTarget[np_target])
+27. NS $ = SUM(fact_actuals_estimates[net_sales_amount])
+28. NS $ LY = CALCULATE([NS $], SAMEPERIODLASTYEAR(dim_date[date]))
+29. NS BM $ =
+SWITCH(TRUE(),
+SELECTEDVALUE(‘Set BM'[ID])=1,[NS $ LY],
+SELECTEDVALUE(‘Set BM'[ID])=2,[NS Target $])
+30. NS Target $ =
+var tgt = SUM(NsGmTarget[ns_target])
+return IF([Customer / Product Filter Check], BLANK(), tgt)
+30. Operational Expense $ = ([Ads & Promotions $]+[Other Operational Expense $])*-1
+31. Other Cost $ = SUM(fact_actuals_estimates[other_cost])
+32. Other Operational Expense $ = SUM(‘fact_actuals_estimates'[other_operational_expense])
+33. Performance Visual Title = [Selected P & L Row] & ” Performance Over Time”
+34. Post Invoice Deduction $ = SUM(fact_actuals_estimates[post_invoice_deductions_amount])
+35. Post Invoice Other Deduction $ = SUM(fact_actuals_estimates[post_invoice_other_deductions_amount])
+36. Pre Invoice Deduction $ = [GS $] – [NIS $]
+37. Quantity = SUM(fact_actuals_estimates[Qty])
+38. RC % = DIVIDE([NS $],CALCULATE([NS $],ALL(dim_market), ALL(dim_customer), ALL(dim_product)))39. 
+39. Risk = IF([Net Error]>0,”EI”, IF([Net Error]<0, “OOS”, BLANK()))
+40. Sales Qty = CALCULATE([Quantity], fact_actuals_estimates[date]<=MAX(LastSalesMonth[LastSalesMonth]))
+41. Sales Trend Title = “NS & GM % For ” & SELECTEDVALUE(dim_customer[customer])
+42. Selected P & L Row = IF(HASONEVALUE(‘P & L Rows'[Description]), SELECTEDVALUE(‘P & L Rows'[Description]), “Net Sales”)
+43. Top / Bottom N Title = “Top / Bottom Products & Customers By ” & [Selected P & L Row]
+44. Total COGS $ = ‘Key Measure'[Freight Cost $] + ‘Key Measure'[Manufacturing Cost $] + ‘Key Measure'[Other Cost $]
+45. Total Post Invoice Deduction = ‘Key Measure'[Post Invoice Deduction $] + ‘Key Measure'[Post Invoice Other Deduction $]
+46. post_invoice_deductions_amount =
+var res = CALCULATE(MAX(post_invoice_deductions[discounts_pct]),
+RELATEDTABLE(post_invoice_deductions))
+return res*fact_actuals_estimates[net_invoice_sales_amount]
+47. post_invoice_other_deductions_amount =
+var res = CALCULATE(MAX(post_invoice_deductions[other_deductions_pct]),
+RELATEDTABLE(post_invoice_deductions))
+return res*fact_actuals_estimates[net_invoice_sales_amount]
+This is my first  Power BI project which taught me how only creating a report is not enough for a Data Analyst. Technical Skills, Soft skills, being a good team player, a problem-solving mindset and get it done attitude are also needed to perform any task in this role.
